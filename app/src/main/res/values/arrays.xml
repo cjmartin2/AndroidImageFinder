@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="size_array">
+        <item></item>
+        <item>small</item>
+        <item>medium</item>
+        <item>large</item>
+        <item>extra-large</item>
+    </string-array>
+
+    <string-array name="color_array">
+        <item></item>
+        <item>black</item>
+        <item>white</item>
+        <item>brown</item>
+        <item>gray</item>
+        <item>red</item>
+        <item>blue</item>
+        <item>green</item>
+        <item>yellow</item>
+        <item>purple</item>
+        <item>pink</item>
+        <item>orange</item>
+    </string-array>
+
+    <string-array name="type_array">
+        <item></item>
+        <item>face</item>
+        <item>photo</item>
+        <item>clipart</item>
+        <item>lineart</item>
+    </string-array>
+</resources>

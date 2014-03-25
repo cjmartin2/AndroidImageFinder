@@ -19,11 +19,18 @@
         <activity
             android:name="in.craigjmart.imagefinder.app.ImageDisplayActivity"
             android:label="@string/app_name" >
-            <!--android:parentActivityName="in.craigjmart.imagefinder.app.ImageSearchActivity" > -->
+
+            <!-- android:parentActivityName="in.craigjmart.imagefinder.app.ImageSearchActivity" > -->
             <!-- Parent activity meta-data to support API level 7+ -->
-            <!--<meta-data
+            <!--
+                <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="in.craigjmart.imagefinder.app.ImageSearchActivity" /> -->
+                android:value="in.craigjmart.imagefinder.app.ImageSearchActivity" />
+            -->
+        </activity>
+        <activity
+            android:name="in.craigjmart.imagefinder.app.ImageFilterActivity"
+            android:label="@string/filter_image" >
         </activity>
     </application>
 

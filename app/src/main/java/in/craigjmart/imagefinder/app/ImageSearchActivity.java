@@ -25,9 +25,14 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class ImageSearchActivity extends SherlockFragmentActivity {
-    String query;
+    String query = "";
     GridView gvResults;
-    public static String KEY_IMG_RESULT = "img_result";
+    public static final String KEY_IMG_RESULT = "img_result";
+    public static final String SIZE = "qSize";
+    public static final String COLOR = "qColor";
+    public static final String TYPE = "qType";
+    public static final String SITE = "qSite";
+    private static final int FILTER_REQUEST = 1010;
 
     ArrayList<ImageResult> imageResults = new ArrayList<ImageResult>();
     ImageResultArrayAdapter imageAdapter;
@@ -37,6 +42,7 @@ public class ImageSearchActivity extends SherlockFragmentActivity {
     String qColor = "";
     String qType = "";
     String qSite = "";
+    int qPage = 0;
 
 
     @Override
@@ -79,7 +85,8 @@ public class ImageSearchActivity extends SherlockFragmentActivity {
             public boolean onQueryTextSubmit(String searchString) {
                 // perform query here
                 query = searchString;
-                doSearch(0);
+                qPage = 0;
+                doSearch();
                 return true;
             }
 
@@ -92,26 +99,42 @@ public class ImageSearchActivity extends SherlockFragmentActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.miFilter) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+    public void onFilterPressed(MenuItem mi){
+        Intent i = new Intent(this, ImageFilterActivity.class);
+        i.putExtra(SIZE, qSize);
+        i.putExtra(COLOR, qColor);
+        i.putExtra(TYPE, qType);
+        i.putExtra(SITE, qSite);
+
+        startActivityForResult(i, FILTER_REQUEST);
     }
 
-    private void doSearch(int page){
-        Toast.makeText(this, query, Toast.LENGTH_SHORT).show();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent i) {
+        if(requestCode == FILTER_REQUEST){
+            qSize = i.getStringExtra(SIZE);
+            qColor = i.getStringExtra(COLOR);
+            qType = i.getStringExtra(TYPE);
+            qSite = i.getStringExtra(SITE);
 
+            //update results
+            if(query != ""){
+                doSearch();
+            }
+        }
+    }
+
+    private void doSearch(){
         //create query string
         String url =
                 "https://ajax.googleapis.com/ajax/services/search/images?" +
                 "&v=1.0" +
                 "&rsz=8" +
+                "&imgsz=" + qSize +
+                "&imgtype=" + qType +
+                "&imgcolor=" + qColor +
+                "&as_sitesearch=" + qSite +
+                "&start=" + Integer.toString(qPage) +
                 "&q=" + Uri.encode(query);
 
         Log.d("DEBUG", url);

@@ -6,6 +6,7 @@
         android:id="@+id/miFilter"
         android:orderInCategory="10"
         android:icon="@drawable/ic_filter"
+        android:onClick="onFilterPressed"
         android:showAsAction="ifRoom"
         android:title="@string/filter">
     </item>

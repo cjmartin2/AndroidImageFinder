@@ -7,6 +7,13 @@
     <string name="filter">Filter Search</string>
     <string name="search">Search</string>
     <string name="query_hint">Enter Search Term</string>
-    <string name="title_activity_image_display">ImageDisplayActivity</string>
+    <string name="filter_image">Filter Image Results</string><string name="advanced_filters">Create Advanced Filters</string>
+    <string name="image_size">Image Size:</string>
+    <string name="image_color">Image Color:</string>
+    <string name="image_type">Image Type:</string>
+    <string name="image_site">Enter Site to get images from:</string>
+    <string name="hint_site">thecodepath.com</string>
+    <string name="size_pick">Pick size</string>
+    <string name="save_filters">Save Filters</string>
 
 </resources>
