@@ -11,7 +11,6 @@ import com.actionbarsherlock.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.widget.SearchView;
@@ -63,6 +62,16 @@ public class ImageSearchActivity extends SherlockFragmentActivity {
             }
         });
 
+        gvResults.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                qPage = page;
+                if(qPage > 0){
+                    performJustSearch();
+                }
+            }
+        });
+
         //when there are no results to show (at app open), should display an image/tutorial,
         // and a search button, where search button will trigger the SearchView
     }
@@ -85,13 +94,13 @@ public class ImageSearchActivity extends SherlockFragmentActivity {
             public boolean onQueryTextSubmit(String searchString) {
                 // perform query here
                 query = searchString;
-                qPage = 0;
-                doSearch();
+                doNewSearch();
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                //auto-complete would have been cool
                 return false;
             }
         });
@@ -119,12 +128,19 @@ public class ImageSearchActivity extends SherlockFragmentActivity {
 
             //update results
             if(query != ""){
-                doSearch();
+                doNewSearch();
             }
         }
     }
 
-    private void doSearch(){
+    //need separate onClick function, so I can clear search results
+    private void doNewSearch(){
+        imageAdapter.clear();
+        qPage = 0;
+        performJustSearch();
+    }
+
+    private void performJustSearch(){
         //create query string
         String url =
                 "https://ajax.googleapis.com/ajax/services/search/images?" +
@@ -134,10 +150,10 @@ public class ImageSearchActivity extends SherlockFragmentActivity {
                 "&imgtype=" + qType +
                 "&imgcolor=" + qColor +
                 "&as_sitesearch=" + qSite +
-                "&start=" + Integer.toString(qPage) +
+                "&start=" + Integer.toString(qPage * 8) + //request size didn't seem to factor in, and only got 1 new image each 'page'
                 "&q=" + Uri.encode(query);
 
-        Log.d("DEBUG", url);
+Log.d("DEBUG", url);
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.get(url, new JsonHttpResponseHandler(){
@@ -146,10 +162,8 @@ public class ImageSearchActivity extends SherlockFragmentActivity {
                 JSONArray imageJsonResults = null;
                 try{
                     imageJsonResults = response.getJSONObject("responseData").getJSONArray("results");
-                    imageResults.clear();
                     //addAll warns about not being compatible with API v10
                     imageAdapter.addAll(ImageResult.fromJSONArray(imageJsonResults));
-                    Log.d("DEBUG", imageResults.toString());
                 }catch (JSONException e){
                     e.printStackTrace();
                 }
